@@ -1,0 +1,15 @@
+name: outfit-prep
+channels:
+- conda-forge
+- defaults
+dependencies:
+- python=3.10
+- pip
+- pip:
+  - numpy
+  - pandas
+  - pillow
+  - opencv-python
+  - tqdm
+  - pyyaml
+  - scikit-learn

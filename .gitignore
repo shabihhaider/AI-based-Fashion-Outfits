@@ -1,0 +1,9 @@
+data/raw/
+data/processed/
+outputs/
+models/
+*.ckpt
+*.onnx
+*.pt
+.ipynb_checkpoints/
+__pycache__/

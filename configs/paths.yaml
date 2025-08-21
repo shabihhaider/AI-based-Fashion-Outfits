@@ -1,0 +1,11 @@
+root: E:\Datasets\outfit-recommender
+raw:
+  deepfashion_mm: E:\Datasets\outfit-recommender\data\raw\deepfashion_mm
+  polyvore_outfit: E:\Datasets\outfit-recommender\data\raw\polyvore_outfit
+processed:
+  deepfashion_mm:
+    images: E:\Datasets\outfit-recommender\data\processed\deepfashion_mm\images
+    manifests: E:\Datasets\outfit-recommender\data\processed\deepfashion_mm\manifests
+  polyvore:
+    images: E:\Datasets\outfit-recommender\data\processed\polyvore\images
+    manifests: E:\Datasets\outfit-recommender\data\processed\polyvore\manifests

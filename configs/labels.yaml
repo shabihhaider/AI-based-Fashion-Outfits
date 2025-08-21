@@ -1,0 +1,127 @@
+version: 1
+note: Clothes only (no bags/jewelry). Extend as needed.
+categories:
+  tops:
+  - t_shirt
+  - shirt
+  - blouse
+  - sweater
+  - hoodie
+  - tank_top
+  - polo
+  - cardigan
+  bottoms:
+  - jeans
+  - trousers
+  - shorts
+  - skirt
+  - leggings
+  - chinos
+  outerwear:
+  - jacket
+  - coat
+  - blazer
+  - raincoat
+  - parka
+  - windbreaker
+  dresses:
+  - dress_mini
+  - dress_knee
+  - dress_midi
+  - dress_maxi
+  - jumpsuit
+attributes:
+  color_primary:
+  - black
+  - white
+  - gray
+  - red
+  - orange
+  - yellow
+  - green
+  - blue
+  - purple
+  - pink
+  - brown
+  - beige
+  - navy
+  - olive
+  - cyan
+  color_secondary:
+  - none
+  - black
+  - white
+  - gray
+  - red
+  - orange
+  - yellow
+  - green
+  - blue
+  - purple
+  - pink
+  - brown
+  - beige
+  - navy
+  - olive
+  - cyan
+  pattern:
+  - solid
+  - striped
+  - plaid
+  - floral
+  - polka_dot
+  - geometric
+  - abstract
+  - graphic
+  - animal_print
+  fabric:
+  - cotton
+  - denim
+  - wool
+  - silk
+  - linen
+  - leather
+  - polyester
+  - nylon
+  - rayon
+  - knit
+  - fleece
+  style:
+  - casual
+  - business_casual
+  - formal
+  - sporty
+  - streetwear
+  - vintage
+  - bohemian
+  - minimalist
+  fit:
+  - tight
+  - regular
+  - loose
+  - oversized
+  sleeve_length:
+  - sleeveless
+  - short
+  - three_quarter
+  - long
+  neckline:
+  - crew
+  - v_neck
+  - scoop
+  - turtleneck
+  - collared
+  - off_shoulder
+  length:
+  - cropped
+  - regular
+  - long
+  - mini
+  - knee
+  - midi
+  - maxi
+  season:
+  - spring
+  - summer
+  - fall
+  - winter

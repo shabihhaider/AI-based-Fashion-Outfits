@@ -1,0 +1,8 @@
+# minimal preprocessing + manifests
+numpy
+pandas
+pillow
+opencv-python
+tqdm
+pyyaml
+scikit-learn
