@@ -6,3 +6,6 @@ opencv-python
 tqdm
 pyyaml
 scikit-learn
+fastapi
+uvicorn[standard]
+python-multipart
