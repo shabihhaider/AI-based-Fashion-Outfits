@@ -112,6 +112,37 @@ class AdvancedColorAnalyzer:
     def __init__(self):
         self.color_cache = {}
         self.kmeans_cache = {}
+    
+    def get_weather_appropriate_colors(self, weather_hint: str, season: str = None) -> Dict[str, float]:
+        """Return color preferences based on weather and season."""
+        color_weights = {}
+        
+        if weather_hint == "hot":
+            # Light, cooling colors preferred
+            color_weights.update({
+                "white": 1.2, "cream": 1.15, "light blue": 1.1, "mint": 1.1,
+                "yellow": 1.05, "coral": 1.0, "black": 0.7, "navy": 0.8
+            })
+        elif weather_hint == "cold":
+            # Warm, insulating colors preferred
+            color_weights.update({
+                "red": 1.15, "orange": 1.1, "burgundy": 1.1, "brown": 1.05,
+                "navy": 1.1, "forest": 1.05, "white": 0.9, "light blue": 0.85
+            })
+        elif weather_hint == "rain":
+            # Darker, water-resistant appearing colors
+            color_weights.update({
+                "navy": 1.2, "black": 1.15, "gray": 1.1, "olive": 1.05,
+                "brown": 1.0, "white": 0.8, "cream": 0.85
+            })
+        else:  # mild
+            # Neutral weighting
+            color_weights = {color: 1.0 for color in [
+                "red", "blue", "green", "yellow", "orange", "purple", "pink",
+                "white", "black", "gray", "brown", "navy", "cream"
+            ]}
+        
+        return color_weights
         
     @lru_cache(maxsize=1000)
     def rgb_to_lab(self, r: int, g: int, b: int) -> Tuple[float, float, float]:
@@ -479,6 +510,38 @@ class AdvancedRecommendationEngine:
         
         logger.info("AdvancedRecommendationEngine initialization complete")
     
+    def _get_fabric_weather_score(self, item_title: str, category: str, weather_hint: str) -> float:
+        """Score items based on fabric appropriateness for weather."""
+        title_lower = item_title.lower()
+        
+        fabric_scores = {
+            "hot": {
+                "cotton": 1.2, "linen": 1.3, "rayon": 1.1, "silk": 1.1,
+                "wool": 0.6, "fleece": 0.4, "cashmere": 0.5, "polyester": 0.9
+            },
+            "cold": {
+                "wool": 1.3, "cashmere": 1.4, "fleece": 1.2, "down": 1.4,
+                "cotton": 0.9, "linen": 0.6, "silk": 0.8, "mesh": 0.3
+            },
+            "rain": {
+                "polyester": 1.2, "nylon": 1.3, "Gore-tex": 1.5, "vinyl": 1.2,
+                "cotton": 0.8, "suede": 0.4, "canvas": 0.6, "lace": 0.5
+            }
+        }
+        
+        if weather_hint not in fabric_scores:
+            return 1.0
+        
+        score = 1.0
+        weather_fabrics = fabric_scores[weather_hint]
+        
+        for fabric, weight in weather_fabrics.items():
+            if fabric in title_lower:
+                score = max(score, weight)  # Take best fabric match
+                break
+        
+        return score
+
     def _load_model(self, ckpt_path: Path):
         """Load model with enhanced error handling and validation"""
         import time
@@ -920,6 +983,7 @@ class AdvancedRecommendationEngine:
         self,
         user_image: Image.Image,
         *,
+        weather_context: Optional[Dict[str, Any]] = None,
         allow_types: str = "tops,bottoms,outerwear,footwear",
         per_bucket: int = 5,
         topk: int = 20,
@@ -977,6 +1041,19 @@ class AdvancedRecommendationEngine:
             logger.warning("No items found after filtering")
             return anchor_color, pd.DataFrame(), analytics
         
+        # Apply weather-aware color adjustments
+        if weather_context:
+            weather_hint = weather_context.get("hint", "mild")
+            season = weather_context.get("season", "unknown")
+            weather_color_weights = self.color_analyzer.get_weather_appropriate_colors(weather_hint, season)
+            
+            for i, (_, row) in enumerate(filtered_items.iterrows()):
+                img_path = str(row["image_path"])
+                item_color, _ = self.color_lookup.get(img_path, ("", 1.0))
+                
+                if item_color in weather_color_weights:
+                    color_bonuses[i] *= weather_color_weights[item_color]
+                    
         # Encode user image with optimizations
         user_tensor = self.preprocessor.preprocess_image(user_image).unsqueeze(0).to(self.device)
         
